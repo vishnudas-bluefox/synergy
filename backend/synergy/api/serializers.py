@@ -3,7 +3,7 @@
 from rest_framework import serializers
 
 #import the models here
-from .models import user
+from .models import user,usertable
 
 
 class userserializer(serializers.ModelSerializer):
@@ -22,3 +22,9 @@ class userserializer(serializers.ModelSerializer):
             instance.set_password(password)
         instance.save()
         return instance
+
+
+class usertableserializer(serializers.ModelSerializer):
+    class Meta:
+        model = usertable
+        fields = ['id','consumerno','name','bpoint','tcredit','ucredit','monthlycap']

@@ -12,3 +12,11 @@ class user(AbstractUser):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
+
+class usertable(models.Model):
+    consumerno = models.IntegerField(default=0,unique=True)
+    name = models.CharField(max_length=100)
+    bpoint = models.IntegerField(default=0)
+    tcredit = models.IntegerField(default=0)
+    ucredit = models.IntegerField(default=0)
+    monthlycap = models.IntegerField(default=0)

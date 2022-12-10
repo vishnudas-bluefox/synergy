@@ -4,8 +4,8 @@ from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from .models import user
-from .serializers import userserializer
+from .models import user,usertable
+from .serializers import userserializer,usertableserializer
 
 import datetime
 import jwt
@@ -25,6 +25,7 @@ classtest =classtest.as_view()
 
 class registerview(APIView):
     def post(self,request):
+        response ={}
         name = request.query_params.get("name")
         consumerno = request.query_params.get("consumerno")
         email = request.query_params.get("email")
@@ -38,7 +39,23 @@ class registerview(APIView):
         serializer = userserializer(data=user_cred)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response(serializer.data)
+        #create user table for handling the points and other details
+        response["s1"]=serializer.data
+        consumerno =  request.query_params.get("consumerno")
+        name = request.query_params.get("name")
+        user_table={}
+        user_table["consumerno"]=consumerno
+        user_table["name"]=name
+        try:
+            serializer2 = usertableserializer(data=user_table)
+        except Exception as e:
+            print("Error",e)
+        serializer2.is_valid(raise_exception=True)
+        serializer2.save()
+        response["s2"]=serializer2.data
+
+
+        return Response(response)
 
 
 registerview =registerview.as_view()
