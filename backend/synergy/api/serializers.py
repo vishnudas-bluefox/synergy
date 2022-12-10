@@ -3,7 +3,7 @@
 from rest_framework import serializers
 
 #import the models here
-from .models import user,usertable
+from .models import user,usertable,kseb
 
 
 class userserializer(serializers.ModelSerializer):
@@ -28,3 +28,9 @@ class usertableserializer(serializers.ModelSerializer):
     class Meta:
         model = usertable
         fields = ['id','consumerno','name','bpoint','tcredit','ucredit','monthlycap']
+
+
+class ksebserializer(serializers.ModelSerializer):
+    class Meta:
+        model = kseb
+        fields = ['consumerno','solarcapacity']

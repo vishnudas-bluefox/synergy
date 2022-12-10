@@ -20,3 +20,6 @@ class usertable(models.Model):
     tcredit = models.IntegerField(default=0)
     ucredit = models.IntegerField(default=0)
     monthlycap = models.IntegerField(default=0)
+class kseb(models.Model):
+    consumerno = models.IntegerField(default=0,unique=True)
+    solarcapacity = models.IntegerField(default=0)

@@ -8,4 +8,5 @@ urlpatterns =[
     path('classtest/',views.classtest),
     path('register/',views.registerview),
     path('login/',views.loginview),
+    path('ksebsolarcapacity/',views.kseb_solarvalue),
 ]

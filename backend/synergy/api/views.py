@@ -4,8 +4,8 @@ from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from .models import user,usertable
-from .serializers import userserializer,usertableserializer
+from .models import user,usertable,kseb
+from .serializers import userserializer,usertableserializer,ksebserializer
 
 import datetime
 import jwt
@@ -95,3 +95,33 @@ class login(APIView):
 
 
 loginview = login.as_view()
+
+# add solar capacity to kseb table by consumerno
+class kseb_solarvalue(APIView):
+    def post(self,request):
+        consumerno = request.query_params.get("consumerno")
+        solarcapacity = request.query_params.get("solarcapacity")
+        solar_data ={}
+        solar_data["consumerno"]=consumerno
+        solar_data["solarcapacity"]=solarcapacity
+        kseb_detail = kseb.objects.filter(consumerno=consumerno).first()
+        if kseb_detail is not None:
+            return AuthenticationFailed("User already have the solar capacity limit")
+        serializer = ksebserializer(data=solar_data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        #updating the monthly capital
+        user_table_details = usertable.objects.filter(consumerno=consumerno).first()
+        if user_table_details is None:
+            return AuthenticationFailed("Consumer dosen't seen in table try different consumerID")
+        user_table_details.monthlycap = solarcapacity
+        print("User monthly capacity updated")
+
+        return Response(serializer.data)
+
+
+kseb_solarvalue = kseb_solarvalue.as_view()
+
+#add consumer points
+#retrive
