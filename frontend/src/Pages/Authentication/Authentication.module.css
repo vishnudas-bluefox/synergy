@@ -1,0 +1,17 @@
+.form{
+    width: 100%;
+    max-width: 330px;
+    padding: 15px;
+    margin: auto;
+    color: #ffffff;
+}
+/* Smartphones (portrait) */
+@media only screen and (max-width: 320px) {
+    .form{
+        width: 100%;
+        max-width: 330px;
+        padding: 15px;
+        margin: auto;
+        color: #ffffff;
+    }
+  }
