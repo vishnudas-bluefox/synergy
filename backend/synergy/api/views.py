@@ -146,4 +146,13 @@ class addpoints(APIView):
         return Response(serializer.data)
 
 addpoints = addpoints.as_view()
-#retrive
+
+#retrive user data using consumer no
+class user_detail(APIView):
+    def get(self, request):
+        consumerno = request.query_params.get("consumerno")
+        user_table_detail = usertable.objects.filter(consumerno=consumerno).first()
+        serializer = usertableserializer(user_table_detail)
+        return Response(serializer.data)
+
+userdata = user_detail.as_view()
