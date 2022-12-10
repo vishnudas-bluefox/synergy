@@ -139,10 +139,13 @@ class addpoints(APIView):
         try:
             user_table_details.bpoint = user_table_details.bpoint+int(points)
             user_table_details.save()
-            serializer = usertableserializer(user_table_details)
+            serializer = usertableserializer(data=user_table_details)
         except Exception as e:
             print("Data saving part:",e)
-
+        try:
+            pass
+        except Exception as e:
+            print("Usertable Fetch part",e)
         return Response(serializer.data)
 
 addpoints = addpoints.as_view()
