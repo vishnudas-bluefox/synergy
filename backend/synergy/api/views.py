@@ -116,6 +116,7 @@ class kseb_solarvalue(APIView):
         if user_table_details is None:
             return AuthenticationFailed("Consumer dosen't seen in table try different consumerID")
         user_table_details.monthlycap = solarcapacity
+        user_table_details.tcredit = solarcapacity
         user_table_details.save()
         print("User monthly capacity updated")
 
@@ -156,3 +157,42 @@ class user_detail(APIView):
         return Response(serializer.data)
 
 userdata = user_detail.as_view()
+
+
+#share the points
+class share_unit(APIView):
+    def post(self, request):
+        token = request.COOKIES.get('token')
+
+        if not token:
+            raise AuthenticationFailed("Unauthenticated no cookies found login again")
+        try:
+            payload =  jwt.decode(token,'secret',algorithms='HS256')
+        except jwt.ExpiredSignature:
+            raise AuthenticationFailed("The cookies Expired create new one")
+
+        userconsumerno = payload["consumerno"]
+        sendconsumerno = request.query_params.get("consumerno")
+        send_amount = request.query_params.get("send_amount")
+        send_amount = int(send_amount)
+
+        #reduce the send amount from wallete
+        user_table_detail = usertable.objects.filter(consumerno=userconsumerno).first()
+        user_table_detail.bpoint = user_table_detail.bpoint - send_amount
+        #update
+        sender_table_detail = usertable.objects.filter(consumerno=sendconsumerno).first()
+        sender_table_detail.bpoint = sender_table_detail.bpoint + send_amount
+
+        user_table_detail.save()
+        sender_table_detail.save()
+
+        user_data_serializer = usertableserializer(user_table_detail)
+        sender_data_serializer = usertableserializer(sender_table_detail)
+
+        response = {}
+        response["user"] = user_data_serializer.data
+        response["sender"] = sender_data_serializer.data
+        return Response(response)
+
+
+share_unit= share_unit.as_view()

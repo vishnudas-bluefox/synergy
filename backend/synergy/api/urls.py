@@ -11,4 +11,5 @@ urlpatterns =[
     path('ksebsolarcapacity/',views.kseb_solarvalue),
     path('addpoint/',views.addpoints),
     path('userdata/',views.userdata),
+    path('shareunit/',views.share_unit),
 ]
