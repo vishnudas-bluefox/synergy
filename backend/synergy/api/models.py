@@ -23,3 +23,7 @@ class usertable(models.Model):
 class kseb(models.Model):
     consumerno = models.IntegerField(default=0,unique=True)
     solarcapacity = models.IntegerField(default=0)
+class transactionlog(models.Model):
+    sender = models.IntegerField(default=0)
+    receiver = models.IntegerField(default=0)
+    amount = models.IntegerField(default=0)

@@ -3,7 +3,7 @@
 from rest_framework import serializers
 
 #import the models here
-from .models import user,usertable,kseb
+from .models import user,usertable,kseb,transactionlog
 
 
 class userserializer(serializers.ModelSerializer):
@@ -34,3 +34,9 @@ class ksebserializer(serializers.ModelSerializer):
     class Meta:
         model = kseb
         fields = ['consumerno','solarcapacity']
+
+
+class transactionserializer(serializers.ModelSerializer):
+    class Meta:
+        model = transactionlog
+        fields = ['sender','receiver','amount']

@@ -4,8 +4,8 @@ from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from .models import user,usertable,kseb
-from .serializers import userserializer,usertableserializer,ksebserializer
+from .models import user,usertable,kseb,transactionlog
+from .serializers import userserializer,usertableserializer,ksebserializer,transactionserializer
 
 import datetime
 import jwt
@@ -180,18 +180,32 @@ class share_unit(APIView):
         user_table_detail = usertable.objects.filter(consumerno=userconsumerno).first()
         user_table_detail.bpoint = user_table_detail.bpoint - send_amount
         #update
-        sender_table_detail = usertable.objects.filter(consumerno=sendconsumerno).first()
-        sender_table_detail.bpoint = sender_table_detail.bpoint + send_amount
+        receiver_table_detail = usertable.objects.filter(consumerno=sendconsumerno).first()
+        receiver_table_detail.bpoint = receiver_table_detail.bpoint + send_amount
 
         user_table_detail.save()
-        sender_table_detail.save()
+        receiver_table_detail.save()
 
         user_data_serializer = usertableserializer(user_table_detail)
-        sender_data_serializer = usertableserializer(sender_table_detail)
+        receiver_data_serializer = usertableserializer(receiver_table_detail)
 
         response = {}
         response["user"] = user_data_serializer.data
-        response["sender"] = sender_data_serializer.data
+        response["receiver"] = receiver_data_serializer.data
+
+        '''
+        #create logs
+        transactionlogs= {}
+        transactionlogs["sender"] = response['user']
+        transactionlogs["receiver"] = response['receiver']
+        transactionlogs['amount'] = send_amount
+
+        serializer = transactionserializer(data=transactionlogs)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        response["transactionlog"] = serializer.data
+        '''
         return Response(response)
 
 
