@@ -26,3 +26,7 @@ http://localhost:8000/addpoint/ params?here
 ```
 http://localhost:8000/userdata/ params?here
 ```
+### POST Share the point value to another user
+```
+http://localhost:8000/shareunit/ params?here
+```
