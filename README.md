@@ -3,6 +3,13 @@ Pi hack project for future development
 
 
 
+## BAckend 
+Developed with:
+* Django REST Framework 
+* psql or sqlite
+
+psql database need to manually configure in settings.py file
+
 ## API End points:
 _____
 
